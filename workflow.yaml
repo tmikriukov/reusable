@@ -1,0 +1,25 @@
+name: Reusable workflow example
+
+on:
+  workflow_call:
+    inputs:
+      username:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    environment: prod-1
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ inputs.username }}
+      - run: echo ${{ github.event_name }}
+      - run: echo '${{ toJSON(github.event) }}'
+      - run: echo '${{ toJSON(github) }}'
+      - run: sleep 30
+      - run: ls /home/runner/work/
+      - run: ls /home/runner/work/test-release-please-6
+      - run: ls /home/runner/work/test-release-please-6/test-release-please-6
+      - run: ls /home/runner/work/_temp/
+      - run: cat /home/runner/work/_temp/_github_workflow/*
+      - run: cat /home/runner/work/_temp/_runner_file_commands/*
