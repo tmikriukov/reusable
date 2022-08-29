@@ -11,6 +11,7 @@ description: 'Greet someone'
 #     value: ${{ steps.random-number-generator.outputs.random-number }}
 runs:
   using: "composite"
+  shell: bash
   steps:
     - run: echo ${{ github.event_name }}
     - run: echo '${{ toJSON(github.event) }}'
