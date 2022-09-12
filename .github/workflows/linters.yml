@@ -52,9 +52,9 @@ jobs:
         run: |
           mkdir -p $(yarn cache dir)/node_modules
           ln -s $(yarn cache dir)/node_modules/ ./node_modules
-          echo "always-auth=true" >> ~/.npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.READ_GITHUB_PKG_TOKEN }}" >> ~/.npmrc
-          echo "@strongsdcom:registry=https://npm.pkg.github.com/" >> ~/.npmrc
+          echo "always-auth=true" >> ${{ env.NPM_CONFIG_USERCONFIG }}
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.READ_GITHUB_PKG_TOKEN }}" >> ${{ env.NPM_CONFIG_USERCONFIG }}
+          echo "@strongsdcom:registry=https://npm.pkg.github.com/" >> ${{ env.NPM_CONFIG_USERCONFIG }}
           yarn policies set-version ${{ inputs.yarn_version }}
           yarn install --frozen-lockfile
       
