@@ -7,8 +7,14 @@ on:
         required: true
       aws-account:
         required: true
+      github-secret-token:
+        required: true
 
     inputs:
+      tag:
+        required: false
+        type: string
+        default: 'latest'
       aws-region: 
         required: false
         type: string
@@ -42,10 +48,13 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          build-args: ${{ inputs.build-args }}
+          build-args: |
+            GITHUB_USER=strongsd-tech
+            GITHUB_SECRET_TOKEN=${{ secrets.github-secret-token }}
+            ${{ inputs.build-args }}
           push: true
           tags: |
-            ${{ secrets.aws-account }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository-name }}:${{ env.TAG }}
+            ${{ secrets.aws-account }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository-name }}:${{ inputs.tag }}
             ${{ secrets.aws-account }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository-name }}:${{ steps.vars.outputs.sha_short }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
