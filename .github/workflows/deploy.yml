@@ -66,4 +66,4 @@ jobs:
             --set image.repository=${{ secrets.aws-account }}.dkr.ecr.${{ env.aws-region}}.amazonaws.com/${{ env.ecr-repository-name }} \
             --set deployedBy='ci/cd by ${{ github.actor }}' \
             --set deployedAt='$(date +"%Y-%m-%d %T %Z")' \
-            $${{ inputs.erp-rails-properties }}
+            ${{ inputs.erp-rails-properties }}
