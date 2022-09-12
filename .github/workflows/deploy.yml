@@ -1,0 +1,70 @@
+env:
+  SOPS_VERSION: 3.6.1
+
+on:
+  workflow_call:
+    secrets:
+      aws-access-key-id: 
+        required: true
+      aws-secret-access-key:
+        required: true
+      aws-account:
+        required: true
+
+    inputs:
+      aws-region: 
+        required: false
+        type: string
+        default: 'eu-north-1'
+      release-name:
+        required: true
+        type: string
+      helm-values:
+        required: true
+        type: string
+      namespace:
+        required: true
+        type: string   
+      ecr-repository-name:
+        required: true
+        type: string
+      erp-rails-properties:
+        required: false
+        type: string
+
+jobs:
+  deploy:
+    name: Deploy (Staging)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Sops Binary Installer
+        uses: mdgreenwald/mozilla-sops-action@v1
+        with:
+          version: ${{ env.SOPS_VERSION }}
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+      - name: AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.aws-access-key-id }}
+          aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
+          aws-region: ${{ inputs.aws-region }}
+      - name: Configure EKS
+        run: aws eks update-kubeconfig --name erp-multi-cluster --region ${{ inputs.aws-region }}
+      - name: Secure kubeconfig permissions
+        run: sudo chown $USER $HOME/.kube/config && chmod 600 $HOME/.kube/config
+      - name: Helm Upgrade
+        env:
+          RELEASE_NAME: ${{ inputs.release-name }}
+          HELM_VALUES: ${{ inputs.helm-value }}
+        run: |
+          helm upgrade ${{ env.RELEASE_NAME }} ./.deploy --install --atomic --wait --dry-run \
+            --namespace $${{ inputs.namespace }} ${{ env.HELM_VALUES }} \
+            --set image.tag=${{ env.GIT_SHA }} \
+            --set image.repository=${{ secrets.aws-account }}.dkr.ecr.${{ env.aws-region}}.amazonaws.com/${{ env.ecr-repository-name }} \
+            --set deployedBy='ci/cd by ${{ github.actor }}' \
+            --set deployedAt='$(date +"%Y-%m-%d %T %Z")' \
+            $${{ inputs.erp-rails-properties }}
