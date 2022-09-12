@@ -40,7 +40,7 @@ jobs:
        
       - name: Set up Node.js
         if: steps.filter.outputs.linters_js == 'true'
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ inputs.node_version }}
           always-auth: true
