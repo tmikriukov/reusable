@@ -13,9 +13,6 @@ on:
         required: false
         type: string
         default: 'eu-north-1'
-      release-name:
-        required: true
-        type: string
       build-args:
         required: true
         type: string
