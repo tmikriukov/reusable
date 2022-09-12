@@ -61,7 +61,7 @@ jobs:
           HELM_VALUES: ${{ inputs.helm-value }}
         run: |
           helm upgrade ${{ env.RELEASE_NAME }} ./.deploy --install --atomic --wait --dry-run \
-            --namespace $${{ inputs.namespace }} ${{ env.HELM_VALUES }} \
+            --namespace ${{ inputs.namespace }} ${{ env.HELM_VALUES }} \
             --set image.tag=${{ env.GIT_SHA }} \
             --set image.repository=${{ secrets.aws-account }}.dkr.ecr.${{ env.aws-region}}.amazonaws.com/${{ env.ecr-repository-name }} \
             --set deployedBy='ci/cd by ${{ github.actor }}' \
