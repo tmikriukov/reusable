@@ -8,11 +8,8 @@ on:
         type: boolean
         default: true
 
-
-
 jobs:
   deploy:
-    environment: prod-1
     runs-on: ubuntu-latest
     steps:
       - run: echo ${{ inputs.has-secret && 'aaa' || 'bbb' }} ooo
