@@ -9,8 +9,10 @@ on:
 #         default: true
 
 jobs:
-  deploy:
+  sss:
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ inputs.has-secret && 'aaa' || 'bbb' }} ooo
+      - name: kkk
+        run: |
+          echo ooo
       
