@@ -14,5 +14,5 @@ jobs:
     steps:
       - name: kkk
         run: |
-          echo ${{ inputs.has-secret && 'aaa' || 'bbb' }} ooo
+          echo ${{ inputs.has-secret == true && 'aaa' || 'bbb' }} ooo
       
