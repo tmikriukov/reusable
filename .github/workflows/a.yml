@@ -1,12 +1,12 @@
 name: Reusable workflow example
 
 on: 
-  workflow_call:
-#     inputs:
-#       has-secrets:
-#         required: false
-#         type: boolean
-#         default: true
+  workflow_dispatch:
+    inputs:
+      has-secrets:
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   sss:
@@ -14,5 +14,5 @@ jobs:
     steps:
       - name: kkk
         run: |
-          echo ooo
+          echo ${{ inputs.has-secret && 'aaa' || 'bbb' }} ooo
       
