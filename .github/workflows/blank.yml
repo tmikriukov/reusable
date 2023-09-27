@@ -12,6 +12,26 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      release_env:
+        description: 'Release environment'
+        required: true
+        default: staging
+        type: choice
+        options:
+          - staging
+          - sandbox
+      domain:
+        description: "Release domain"
+        required: true
+        default: nl
+        type: choice
+        options:
+          - nl
+          - de
+env:
+  RELEASE_ENV: ${{ github.event.inputs.release_env }}
+  RELEASE_NAME: prime-access${{ github.event.inputs.domain=='nl' && '' || '-'+github.event.inputs.domain }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
