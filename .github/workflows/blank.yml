@@ -31,7 +31,7 @@ on:
           - de
 env:
   RELEASE_ENV: ${{ github.event.inputs.release_env }}
-  RELEASE_NAME: prime-access${{ github.event.inputs.domain!='nl' && format('-{0}',github.event.inputs.domain) }}
+  RELEASE_NAME: prime-access${{ github.event.inputs.domain!='nl' && format('-{0}',github.event.inputs.domain) || '' }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
